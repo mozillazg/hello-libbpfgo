@@ -1,0 +1,6 @@
+.env
+/.vagrant/
+*.o
+vmlinux.h
+output/
+/01-hello-world/main-static
