@@ -3,7 +3,7 @@
 *.o
 vmlinux.h
 output/
-/01-hello-world/main-static
+main-static
 # Binaries for programs and plugins
 *.exe
 *.exe~
