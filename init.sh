@@ -5,7 +5,7 @@ GO_VERSION="1.17"
 OPA_VERSION="v0.35.0"
 
 apt-get update
-apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12
+apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12 bpftrace
 
 for tool in "clang" "llc" "llvm-strip"
 do
