@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+# base on https://github.com/aquasecurity/tracee/blob/main/Vagrantfile
+
 GO_VERSION="1.17"
 OPA_VERSION="v0.35.0"
 

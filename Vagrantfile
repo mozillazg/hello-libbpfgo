@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# https://github.com/aquasecurity/tracee/blob/main/Vagrantfile
+# base on https://github.com/aquasecurity/tracee/blob/main/Vagrantfile
 Vagrant.configure("2") do |config|
   # config.vm.box = "ubuntu/focal64"     # Ubuntu 20.04 Focal Fossa (non CO-RE)
   # config.vm.box = "ubuntu/hirsute64"   # Ubuntu 21.04 Hirsute Hippo (CO-RE)
