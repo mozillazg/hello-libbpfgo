@@ -4,6 +4,7 @@
 vmlinux.h
 output/
 main-static
+main
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -20,3 +21,4 @@ main-static
 # Dependency directories (remove the comment below to include it)
 # vendor/
 events.txt
+/05-get-process-info-plus/
