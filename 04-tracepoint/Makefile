@@ -44,7 +44,7 @@ CGO_EXTLDFLAGS_DYN = '-w'
 PROGRAM = main
 
 all:
-	$(MAKE) -C . $(PROGRAM)-static
+	$(MAKE) -C . $(PROGRAM)
 
 # vmlinux header file
 
@@ -71,8 +71,8 @@ endif
 
 # static libbpf generation for the git submodule
 
-.PHONY: libbpf-static
-libbpf-static: $(LIBBPF_OBJ)
+.PHONY: libbpf
+libbpf: $(LIBBPF_OBJ)
 
 $(LIBBPF_OBJ): $(LIBBPF_SRC) $(wildcard $(LIBBPF_SRC)/*.[ch]) | $(OUTPUT)/libbpf
 	CC="$(CC)" CFLAGS="$(CFLAGS)" LD_FLAGS="$(LDFLAGS)" \
@@ -103,26 +103,16 @@ $(PROGRAM).bpf.o: $(PROGRAM).bpf.c | vmlinuxh
 
 ## GO example
 
-.PHONY: $(PROGRAM)-static
-.PHONY: $(PROGRAM)-dynamic
+.PHONY: $(PROGRAM)
 
-$(PROGRAM)-static: libbpf-static | $(PROGRAM).bpf.o
+$(PROGRAM): libbpf | $(PROGRAM).bpf.o
 	CC=$(CLANG) \
 		CGO_CFLAGS=$(CGO_CFLAGS_STATIC) \
 		CGO_LDFLAGS=$(CGO_LDFLAGS_STATIC) \
                 GOARCH=$(GOARCH) \
                 go build \
                 -tags netgo -ldflags $(CGO_EXTLDFLAGS_STATIC) \
-                -o $(PROGRAM)-static ./$(PROGRAM).go
-
-$(PROGRAM)-dynamic: $(PROGRAM).bpf.o
-	CC=$(CLANG) \
-		CGO_CFLAGS=$(CGO_CFLAGS_DYN) \
-		CGO_LDFLAGS=$(CGO_LDFLAGS_DYN) \
-                GOARCH=$(GOARCH) \
-                go build \
-                -tags netgo -ldflags $(CGO_EXTLDFLAGS_DYN) \
-                -o $(PROGRAM)-dynamic ./$(PROGRAM).go
+                -o $(PROGRAM) ./$(PROGRAM).go
 
 ## clean
 
@@ -130,5 +120,5 @@ clean:
 	$(MAKE) -C $(LIBBPF_SRC) clean
 	rm -rf $(OUTPUT)
 	rm -rf $(VMLINUXH)
-	rm -rf $(PROGRAM)-*static $(PROGRAM)-*dynamic
+	rm -rf $(PROGRAM) $(PROGRAM)-*static $(PROGRAM)-*dynamic
 	rm -rf $(PROGRAM).bpf.o $(PROGRAM).o
