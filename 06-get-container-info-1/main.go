@@ -106,6 +106,7 @@ func getContainerId(pid uint32) string {
 		log.Printf("open file %s failed: %+v", path, err)
 		return ""
 	}
+	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
