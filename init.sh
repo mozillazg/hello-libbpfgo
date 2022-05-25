@@ -19,6 +19,7 @@ snap install microk8s --classic
 microk8s status --wait-ready
 usermod -a -G microk8s vagrant
 # microk8s enable dashboard
+microk8s enable dns
 
 mkdir -p /home/vagrant/.kube/
 microk8s kubectl config view --raw > /home/vagrant/.kube/config
