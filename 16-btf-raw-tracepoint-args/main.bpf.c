@@ -13,6 +13,8 @@ int btf_raw_tracepoint__sys_enter(u64 *ctx)
         return 0;
 
     struct pt_regs *regs = (struct pt_regs *)ctx[0];
+    struct task_struct *task = (struct task_struct *) bpf_get_current_task_btf();
+
     // int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags);
     char pathname[256];
     u32 mode;
@@ -21,8 +23,8 @@ int btf_raw_tracepoint__sys_enter(u64 *ctx)
     bpf_core_read_user_str(&pathname, sizeof(pathname), pathname_ptr);
     mode = (u32) PT_REGS_PARM3_CORE(regs);
 
-    char fmt[] = "fchmodat %s %d\n";
-    bpf_trace_printk(fmt, sizeof(fmt), &pathname, mode);
+    char fmt[] = "%d fchmodat %s %d\n";
+    bpf_trace_printk(fmt, sizeof(fmt), task->tgid, &pathname, mode);
 	return 0;
 }
 
