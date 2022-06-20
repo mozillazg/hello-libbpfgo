@@ -1,5 +1,5 @@
 
-https://mozillazg.com/2022/05/ebpf-libbpf-raw-tracepoint-common-questions.html
+https://mozillazg.com/2022/06/ebpf-libbpf-btf-powered-enabled-raw-tracepoint-common-questions.html
 
 ## Usage
 
