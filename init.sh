@@ -43,7 +43,7 @@ echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/vagrant/.profile
 echo 'PROMPT_COMMAND="history -a; $PROMPT_COMMAND"' >> /home/vagrant/.profile
 echo 'export PS1="$PS1\n\$ " >> /home/vagrant/.profile
 cat <<EOF | tee -a /home/vagrant/.profile
-export GOAPTH=/go_workshop
+export GOPATH=/go_workshop
 alias cdcode='cd /go_workshop/src/github.com/mozillazg/hello-libbpfgo'
 export HISTFILESIZE=
 export HISTTIMEFORMAT="[%F %T] "
