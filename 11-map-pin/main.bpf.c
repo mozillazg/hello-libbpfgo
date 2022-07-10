@@ -23,12 +23,6 @@ int tracepoint__syscalls__sys_enter_openat(struct trace_event_raw_sys_enter *ctx
         if (pid != (u32)tgid) {
             return 0;
         }
-        char comm[TASK_COMM_LEN];
-        bpf_get_current_comm(&comm, sizeof(comm));
-        // filter cat
-        if (!(comm[0] == 'c' && comm[1] == 'a' && comm[2] == 't' && comm[3] == '\0')) {
-            return 0;
-        }
 
 		struct event_t event = {};
 		event.pid = pid;
