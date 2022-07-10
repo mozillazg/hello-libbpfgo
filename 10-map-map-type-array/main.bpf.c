@@ -10,14 +10,14 @@ struct {
 	__uint(type, BPF_MAP_TYPE_ARRAY);
 	__type(key, u32);
 	__type(value, struct event_t);
-	__uint(max_entries, 1024 * 1024  /* should match key size */);
+	__uint(max_entries, 1024 * 1024 * 4  /* should >= maxsize of key size */);
 } pid_event_map SEC(".maps");
 
 struct {
 	__uint(type, BPF_MAP_TYPE_ARRAY);
 	__type(key, u32);
 	__type(value, u8);
-	__uint(max_entries, 1024 * 1024  /* should match key size */);
+	__uint(max_entries, 1024 * 1024 * 4 /* should >= maxsize of key size */);
 } pid_filter SEC(".maps");
 
 
