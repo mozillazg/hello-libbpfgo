@@ -12,7 +12,7 @@ $ make
 run:
 
 ```
-$ sudo ./main
+$ make run
 
-$ sudo cat /sys/kernel/debug/tracing/trace_pipe
+$ make cat
 ```

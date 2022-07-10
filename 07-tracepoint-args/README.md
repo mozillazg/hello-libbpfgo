@@ -12,7 +12,7 @@ $ make
 run:
 
 ```
-$ sudo ./main
+$ make run
 
 $ touch a.txt
 $ chmod 600 a.txt

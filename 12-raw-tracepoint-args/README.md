@@ -12,10 +12,10 @@ $ make
 run:
 
 ```
-$ sudo ./main
+$ make run
 
 $ touch a.txt
 $ chmod 600 a.txt
 
-$ sudo cat /sys/kernel/debug/tracing/trace_pipe
+$ make cat
 ```
