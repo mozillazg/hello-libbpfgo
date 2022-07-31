@@ -5,7 +5,7 @@
 #include <bpf/bpf_core_read.h>
 #include "common.h"
 
-#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
+#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/ // ipv4
 #define ETH_HLEN	14		/* Total octets in header.	 */
 
 unsigned long long load_byte(void *skb,
@@ -32,19 +32,24 @@ int socket__filter_icmp(struct __sk_buff *skb)
 	if (load_byte(skb, ETH_HLEN + offsetof(struct iphdr, protocol)) != IPPROTO_ICMP)
 		return 0;
 
-    u32 src_addr, dst_addr;
-    src_addr = load_word(skb, ETH_HLEN + offsetof(struct iphdr, saddr));
-    dst_addr = load_word(skb, ETH_HLEN + offsetof(struct iphdr, daddr));
+    u32 src_addr = load_word(skb, ETH_HLEN + offsetof(struct iphdr, saddr));
+    u32 dst_addr = load_word(skb, ETH_HLEN + offsetof(struct iphdr, daddr));
+    u8 type = load_byte(skb, ETH_HLEN + sizeof(struct iphdr) + offsetof(struct icmphdr, type));
+    u8 code = load_byte(skb, ETH_HLEN + sizeof(struct iphdr) + offsetof(struct icmphdr, code));
 
     struct event_t *event;
     event = bpf_ringbuf_reserve(&events, sizeof(*event), 0);
     if (!event) {
         return 0;
     }
+
     event->src_addr = src_addr;
     event->dst_addr = dst_addr;
-    char fmt[] = "ICMP packet: %x -> %x";
-    bpf_trace_printk(fmt, sizeof(fmt), event->src_addr, event->dst_addr);
+    event->type = type;
+    event->code = code;
+
+    char fmt[] = "ICMP packet: %x -> %x %d";
+    bpf_trace_printk(fmt, sizeof(fmt), event->src_addr, event->dst_addr, event->type);
     bpf_ringbuf_submit(event, 0);
     return 0;
 }

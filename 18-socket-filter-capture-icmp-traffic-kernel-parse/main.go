@@ -9,6 +9,7 @@ import (
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"golang.org/x/net/ipv4"
 )
 
 const (
@@ -17,6 +18,8 @@ const (
 )
 
 type Event struct {
+	Type    uint8
+	Code    uint8
 	SrcAddr uint32
 	DstAddr uint32
 }
@@ -26,6 +29,10 @@ func (e Event) Src() net.IP {
 }
 func (e Event) Dst() net.IP {
 	return uint32ToIpV4(e.DstAddr)
+}
+
+func (e Event) TypeStr() string {
+	return ipv4.ICMPType(e.Type).String()
 }
 
 func uint32ToIpV4(n uint32) net.IP {
@@ -85,7 +92,7 @@ func main() {
 				log.Println(err)
 				continue
 			}
-			log.Printf("[ICMP] %s -> %s", event.Src(), event.Dst())
+			log.Printf("[ICMP] %s -> %s: %s %d", event.Src(), event.Dst(), event.TypeStr(), event.Code)
 		}
 	}
 }
