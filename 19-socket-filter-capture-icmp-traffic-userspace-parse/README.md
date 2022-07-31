@@ -16,5 +16,4 @@ $ make run
 
 $ ping baidu.com
 
-$ make cat
 ```

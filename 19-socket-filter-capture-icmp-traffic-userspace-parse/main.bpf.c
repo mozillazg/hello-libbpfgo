@@ -4,7 +4,7 @@
 #include <bpf/bpf_tracing.h>
 #include <bpf/bpf_core_read.h>
 
-#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
+#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/ // ipv4
 #define ETH_HLEN	14		/* Total octets in header.	 */
 
 unsigned long long load_byte(void *skb,
