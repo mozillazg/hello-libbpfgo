@@ -3,6 +3,7 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
 #include <bpf/bpf_core_read.h>
+#include <bpf/bpf_endian.h>
 #include "common.h"
 
 #define ETH_P_IP	0x0800		/* Internet Protocol packet	*/ // ipv4
@@ -43,13 +44,13 @@ int socket__filter_icmp(struct __sk_buff *skb)
         return 0;
     }
 
-    event->src_addr = src_addr;
-    event->dst_addr = dst_addr;
+    event->src_addr = bpf_ntohl(src_addr);
+    event->dst_addr = bpf_ntohl(dst_addr);
     event->type = type;
     event->code = code;
 
-    char fmt[] = "ICMP packet: %x -> %x %d";
-    bpf_trace_printk(fmt, sizeof(fmt), event->src_addr, event->dst_addr, event->type);
+    char fmt[] = "ICMP packet: %pI4 -> %pI4 %d";
+    bpf_trace_printk(fmt, sizeof(fmt), &event->src_addr, &event->dst_addr, event->type);
     bpf_ringbuf_submit(event, 0);
     return 0;
 }

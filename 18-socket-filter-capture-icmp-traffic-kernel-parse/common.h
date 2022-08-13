@@ -2,8 +2,8 @@
 #define TASK_COMM_LEN			16
 
 struct event_t {
-    u8 type;
-    u8 code;
+    u16 type;
+    u16 code;
     u32 src_addr;
     u32 dst_addr;
 };

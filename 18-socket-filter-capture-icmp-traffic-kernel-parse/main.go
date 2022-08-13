@@ -18,8 +18,8 @@ const (
 )
 
 type Event struct {
-	Type    uint8
-	Code    uint8
+	Type    uint16
+	Code    uint16
 	SrcAddr uint32
 	DstAddr uint32
 }
@@ -37,7 +37,7 @@ func (e Event) TypeStr() string {
 
 func uint32ToIpV4(n uint32) net.IP {
 	ip := make(net.IP, 4)
-	binary.BigEndian.PutUint32(ip, n)
+	binary.LittleEndian.PutUint32(ip, n)
 	return ip
 }
 
