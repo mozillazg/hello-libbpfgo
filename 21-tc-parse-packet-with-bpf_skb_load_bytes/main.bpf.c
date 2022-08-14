@@ -69,7 +69,7 @@ int handle_ingress(struct __sk_buff *skb)
     }
 
     char fmt[] = "payload:\n%s";
-    bpf_trace_printk(fmt, sizeof(fmt), payload->data, payload->data);
+    bpf_trace_printk(fmt, sizeof(fmt), payload->data);
 
     return TC_ACT_UNSPEC;
 }
