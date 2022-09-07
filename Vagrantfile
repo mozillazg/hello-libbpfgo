@@ -5,8 +5,9 @@
 Vagrant.configure("2") do |config|
   # config.vm.box = "ubuntu/focal64"     # Ubuntu 20.04 Focal Fossa (non CO-RE)
   # config.vm.box = "ubuntu/hirsute64"   # Ubuntu 21.04 Hirsute Hippo (CO-RE)
-  config.vm.box = "ubuntu/impish64"      # Ubuntu 21.10 Impish Indri (CO-RE)
-  config.vm.box_version = "20220319.0.1"
+  # config.vm.box = "ubuntu/impish64"      # Ubuntu 21.10 Impish Indri (CO-RE)
+  config.vm.box = "ubuntu/jammy64"       #  Ubuntu 22.04 Jammy Jellyfish (CO-RE)
+  config.vm.box_version = "20220902.0.0"
 
   config.env.enable # Enable vagrant-env(.env)
 
