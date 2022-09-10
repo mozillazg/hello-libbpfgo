@@ -9,6 +9,9 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/jammy64"       #  Ubuntu 22.04 Jammy Jellyfish (CO-RE)
   config.vm.box_version = "20220902.0.0"
 
+  # config.ssh.username = "vagrant"
+  config.ssh.extra_args = ["-t", "cd /vagrant; bash --login"]
+
   config.env.enable # Enable vagrant-env(.env)
 
   # Forward MkDocs dev server to preview documentation on the host at http://localhost:8000/tracee
