@@ -35,6 +35,12 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", path: "init.sh"
-
   config.vm.synced_folder ENV["GOPATH"], "/go_workshop"
+
+  # If a 'Vagrantfile.local' file exists, import any configuration settings
+  # defined there into here. Vagrantfile.local is ignored in version control,
+  # so this can be used to add configuration specific to this computer.
+  if File.exist? "Vagrantfile.local"
+      instance_eval File.read("Vagrantfile.local"), "Vagrantfile.local"
+  end
 end
