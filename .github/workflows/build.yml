@@ -1,0 +1,39 @@
+name: Build examples
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-examples:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          set -e
+          sudo apt-get update
+          sudo apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12
+          for tool in "clang" "llc" "llvm-strip"; do
+            path=$(which $tool-12)
+            test $(which $tool) && sudo mv $(which $tool){,.bak}
+            sudo ln -sf $path ${path%-*}
+          done
+
+          git submodule update --init --recursive
+
+      - name: build examples
+        run: |
+          set -e
+          for i in $(ls ./ | grep '[0-9]' ); do
+            echo -e "\033[33m=== start build $i  ===\033[0;39m"
+            ( cd $i && test -f Makefile && make )
+            echo -e "\033[32m=== finish build $i ===\033[0;39m"
+          done
