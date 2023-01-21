@@ -2,6 +2,6 @@ module github.com/mozillazg/hello-libbpfgo
 
 go 1.17
 
-require github.com/aquasecurity/libbpfgo v0.4.4-libbpf-1.0.1
+require github.com/aquasecurity/libbpfgo v0.4.6-libbpf-1.1.0
 
-replace github.com/aquasecurity/libbpfgo => ./libbpfgo/
+require github.com/stretchr/testify v1.8.2 // indirect
