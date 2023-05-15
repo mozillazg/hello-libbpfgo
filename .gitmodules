@@ -1,6 +1,3 @@
 [submodule "libbpf"]
 	path = libbpf
 	url = https://github.com/libbpf/libbpf.git
-[submodule "libbpfgo"]
-	path = libbpfgo
-	url = https://github.com/aquasecurity/libbpfgo.git

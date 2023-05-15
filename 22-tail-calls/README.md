@@ -1,4 +1,4 @@
-https://mozillazg.com/2022/05/ebpf-libbpfgo-use-map-example.html
+https://mozillazg.com/2022/10/ebpf-libbpf-use-tail-calls.html
 
 ## Usage
 
@@ -12,7 +12,9 @@ run:
 
 ```
 $ sudo ./main
+
 $ touch a.txt
-$ cat a.txt
+$ chmod 600 a.txt
+
 $ sudo cat /sys/kernel/debug/tracing/trace_pipe
 ```

@@ -114,17 +114,8 @@ $(PROGRAM): libbpf | $(PROGRAM).bpf.o
                 -tags netgo -ldflags $(CGO_EXTLDFLAGS_STATIC) \
                 -o $(PROGRAM) ./$(PROGRAM).go
 
-.PHONE: run
-run:
-	sudo ./main
-
-.PHONE: cat
-cat:
-	sudo cat /sys/kernel/debug/tracing/trace_pipe
-
 ## clean
 
-.PHONY: clean
 clean:
 	$(MAKE) -C $(LIBBPF_SRC) clean
 	rm -rf $(OUTPUT)

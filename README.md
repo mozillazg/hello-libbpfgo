@@ -1,5 +1,7 @@
 # hello-libbpfgo
 
+[![Build examples](https://github.com/mozillazg/hello-libbpfgo/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/mozillazg/hello-libbpfgo/actions/workflows/build.yml)
+
 Examples for libbpf and libbpfgo.
 
 https://mozillazg.com/tag/libbpfgo.html
@@ -8,7 +10,5 @@ https://mozillazg.com/tag/libbpfgo.html
 ## setup develop env
 
 ```
-$ vagrant plugin install vagrant-env
-$ cp .env.example .env
 $ vagrant up
 ```
