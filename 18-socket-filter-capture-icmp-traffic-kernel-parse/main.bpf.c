@@ -22,7 +22,7 @@ struct {
     __uint(max_entries, 16 * 1024 /* 16 KB */);
 } events SEC(".maps");
 
-SEC("socket/filter_icmp")
+SEC("socket")
 int socket__filter_icmp(struct __sk_buff *skb)
 {
 	// Skip non-IP packets

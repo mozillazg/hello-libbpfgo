@@ -14,7 +14,7 @@ unsigned long long load_half(void *skb,
 unsigned long long load_word(void *skb,
 			     unsigned long long off) asm("llvm.bpf.load.word");
 
-SEC("socket/filter_icmp")
+SEC("socket")
 int socket__filter_icmp(struct __sk_buff *skb)
 {
 	// Skip non-IP packets
