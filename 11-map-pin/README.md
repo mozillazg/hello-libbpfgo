@@ -12,7 +12,7 @@ $ make
 run:
 
 ```
-$ sudo ./main
-
+$ make run
+$ make cat
 $ sudo ls /sys/fs/bpf/
 ```

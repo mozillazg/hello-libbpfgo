@@ -1,5 +1,6 @@
 
 
+
 ## Usage
 
 build:
@@ -12,4 +13,7 @@ run:
 
 ```
 $ make run
+
+$ ping baidu.com
+
 ```

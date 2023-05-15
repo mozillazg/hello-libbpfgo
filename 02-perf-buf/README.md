@@ -12,5 +12,5 @@ $ make
 run:
 
 ```
-$ sudo ./main
+$ make run
 ```
