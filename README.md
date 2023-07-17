@@ -4,7 +4,7 @@
 
 Examples for libbpf and libbpfgo.
 
-https://mozillazg.com/tag/libbpfgo.html
+https://mozillazg.com/tag/libbpf.html
 
 
 ## setup develop env
