@@ -81,6 +81,7 @@ $(LIBBPF_OBJ): $(LIBBPF_SRC) $(wildcard $(LIBBPF_SRC)/*.[ch]) | $(OUTPUT)/libbpf
 		OBJDIR=$(LIBBPF_OBJDIR) \
 		DESTDIR=$(LIBBPF_DESTDIR) \
 		INCLUDEDIR= LIBDIR= UAPIDIR= prefix= libdir= install
+	$(MAKE) -C $(LIBBPF_SRC) UAPIDIR=$(LIBBPF_DESTDIR) install_uapi_headers
 
 $(LIBBPF_SRC):
 ifeq ($(wildcard $@), )
