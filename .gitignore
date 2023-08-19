@@ -1,6 +1,6 @@
 .env
 /.vagrant/
-*.o
+main.bpf.o
 vmlinux.h
 output/
 main-static
