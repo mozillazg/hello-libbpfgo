@@ -91,7 +91,7 @@ $(OUTPUT)/libbpf:
 
 BPF_CFLAGS = -target bpf -D__TARGET_ARCH_x86
 
-generate: ../$(PROGRAM).bpf.c | vmlinuxh
+generate: libbpf ../$(PROGRAM).bpf.c | vmlinuxh
 	BPF_CLANG="$(CLANG)" BPF_CFLAGS="$(BPF_CFLAGS)" go generate -x ./...
 
 ## GO example
