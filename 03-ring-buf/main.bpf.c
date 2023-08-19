@@ -1,3 +1,5 @@
+//go:build ignore
+
 #include "vmlinux.h"
 
 #include "common.h"
@@ -19,7 +21,7 @@ int kprobe__do_sys_openat2(struct pt_regs *ctx) {
     }
 
     e->pid = bpf_get_current_pid_tgid() >> 32;
-    bpf_probe_read(&e->filename, sizeof(e->filename), PT_REGS_PARM2(ctx));
+    bpf_probe_read(&e->filename, sizeof(e->filename), (void *)PT_REGS_PARM2(ctx));
 
     bpf_ringbuf_submit(e, 0);
 
