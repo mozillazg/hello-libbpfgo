@@ -1,3 +1,5 @@
+//go:build ignore
+
 #include "vmlinux.h"
 
 #include "common.h"
