@@ -6,7 +6,7 @@ set -e
 GO_VERSION="1.20"
 
 apt-get update
-apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12 bpftrace
+apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12 bpftrace linux-tools-generic
 
 for tool in "clang" "llc" "llvm-strip"
 do
