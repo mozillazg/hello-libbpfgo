@@ -50,8 +50,8 @@ int raw_tracepoint__sys_enter(struct bpf_raw_tracepoint_args *ctx) {
 
     bpf_tail_call(ctx, &tail_jmp_map, syscall_id);
 
-    char fmt[] = "no bpf program for syscall %d\n";
-    bpf_trace_printk(fmt, sizeof(fmt), syscall_id);
+    // char fmt[] = "no bpf program for syscall %d\n";
+    // bpf_trace_printk(fmt, sizeof(fmt), syscall_id);
     return 0;
 }
 
