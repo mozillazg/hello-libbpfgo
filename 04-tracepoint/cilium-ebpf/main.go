@@ -43,6 +43,7 @@ func main() {
 		log.Println(err)
 		return
 	}
+	defer reader.Close()
 
 	log.Println("Waiting for events...")
 
