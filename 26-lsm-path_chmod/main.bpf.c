@@ -6,7 +6,7 @@
 
 
 SEC("lsm/path_chmod")
-int lsm_path_chmod(struct path *path) {
+int BPF_PROG(lsm_path_chmod, struct path *path) {
     char path_str[32];
     struct qstr dname;
 
