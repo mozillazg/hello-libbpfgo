@@ -103,7 +103,7 @@ Program Types
 +-------------------------------------------+----------------------------------------+----------------------------------+-----------------------+-----------+
 | ``BPF_PROG_TYPE_LSM``                     | ``BPF_LSM_CGROUP``                     | ``lsm_cgroup+``                  |                       |           |
 +                                           +----------------------------------------+----------------------------------+-----------------------+-----------+
-|                                           | ``BPF_LSM_MAC``                        | ``lsm+`` [#lsm]_                 |                       |           |
+|                                           | ``BPF_LSM_MAC``                        | ``lsm+`` [#lsm]_                 |`26`_                  |           |
 +                                           +                                        +----------------------------------+-----------------------+-----------+
 |                                           |                                        | ``lsm.s+`` [#lsm]_               |                       | Yes       |
 +-------------------------------------------+----------------------------------------+----------------------------------+-----------------------+-----------+
@@ -208,16 +208,18 @@ Program Types
 .. |Build examples| image:: https://github.com/mozillazg/hello-libbpfgo/actions/workflows/build.yml/badge.svg?branch=master
    :target: https://github.com/mozillazg/hello-libbpfgo/actions/workflows/build.yml
 
-.. _04: https://github.com/mozillazg/hello-libbpfgo/tree/master/04-tracepoint
-.. _07: https://github.com/mozillazg/hello-libbpfgo/tree/master/07-tracepoint-args
-.. _12: https://github.com/mozillazg/hello-libbpfgo/tree/master/12-raw-tracepoint-args
-.. _13: https://github.com/mozillazg/hello-libbpfgo/tree/master/13-raw-tracepoint-args-sched_switch
-.. _14: https://github.com/mozillazg/hello-libbpfgo/tree/master/14-tracepoint-args-sched_switch
-.. _16: https://github.com/mozillazg/hello-libbpfgo/tree/master/16-btf-raw-tracepoint-args
-.. _17: https://github.com/mozillazg/hello-libbpfgo/tree/master/17-btf-raw-tracepoint-args-sched_switch
-.. _18: https://github.com/mozillazg/hello-libbpfgo/tree/master/18-socket-filter-capture-icmp-traffic-kernel-parse
-.. _19: https://github.com/mozillazg/hello-libbpfgo/tree/master/19-socket-filter-capture-icmp-traffic-userspace-parse
-.. _20: https://github.com/mozillazg/hello-libbpfgo/tree/master/20-socket-filter-capture-icmp-traffic-kernel-parse-without-llvm-load
-.. _21: https://github.com/mozillazg/hello-libbpfgo/tree/master/21-tc-parse-packet-with-bpf_skb_load_bytes
-.. _25: https://github.com/mozillazg/hello-libbpfgo/tree/master/25-tc-parse-packet-with-direct-memory-access
+.. _04: 04-tracepoint
+.. _07: 07-tracepoint-args
+.. _12: 12-raw-tracepoint-args
+.. _13: 13-raw-tracepoint-args-sched_switch
+.. _14: 14-tracepoint-args-sched_switch
+.. _16: 16-btf-raw-tracepoint-args
+.. _17: 17-btf-raw-tracepoint-args-sched_switch
+.. _18: 18-socket-filter-capture-icmp-traffic-kernel-parse
+.. _19: 19-socket-filter-capture-icmp-traffic-userspace-parse
+.. _20: 20-socket-filter-capture-icmp-traffic-kernel-parse-without-llvm-load
+.. _21: 21-tc-parse-packet-with-bpf_skb_load_bytes
+.. _25: 25-tc-parse-packet-with-direct-memory-access
+.. _26: 26-lsm-path_chmod
+
 
