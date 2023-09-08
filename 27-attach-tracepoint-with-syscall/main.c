@@ -107,7 +107,7 @@ struct bpf_insn bpf_prog[] = {
     BPF_MOV64_IMM(BPF_REG_2, 14),         // r2 = 14
     BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_trace_printk), // call bpf_trace_printk#-66304
 
-                                           // return 0;
+    // return 0;
     BPF_MOV64_IMM(BPF_REG_0, 0),          // r0 = 0
     BPF_EXIT_INSN(),                      // exit
 };
