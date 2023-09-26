@@ -5,8 +5,8 @@
 #include <bpf/bpf_tracing.h>
 
 
-SEC("tracepoint/syscalls/sys_enter_openat")
-int tracepoint_openat(struct trace_event_raw_sys_enter *ctx) {
+SEC("tracepoint/syscalls/sys_enter_execve")
+int tracepoint_execve(struct trace_event_raw_sys_enter *ctx) {
     char fmt[] = "hello world:\n";
     bpf_trace_printk(fmt, sizeof(fmt));
 
