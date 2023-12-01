@@ -12,6 +12,7 @@ require (
 
 require (
 	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/gopacket v1.1.19 // indirect
 	github.com/josharian/native v1.1.0 // indirect
 	github.com/mdlayher/netlink v1.6.0 // indirect
 	github.com/mdlayher/socket v0.1.1 // indirect

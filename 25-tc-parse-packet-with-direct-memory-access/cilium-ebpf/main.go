@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -12,9 +13,12 @@ import (
 	"unsafe"
 
 	"github.com/cilium/ebpf"
+	"github.com/cilium/ebpf/perf"
 	"github.com/cilium/ebpf/rlimit"
 	"github.com/florianl/go-tc"
 	"github.com/florianl/go-tc/core"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"golang.org/x/sys/unix"
 )
 
@@ -92,6 +96,18 @@ func attachTc(devID *net.Interface, prog *ebpf.Program) (func(), error) {
 
 }
 
+func parseEvent(data []byte) {
+	// Decode a packet
+	packet := gopacket.NewPacket(data, layers.LayerTypeEthernet, gopacket.Default)
+	// Get the TCP layer from this packet
+	if tcpLayer := packet.Layer(layers.LayerTypeTCP); tcpLayer != nil {
+		log.Println("This is a TCP packet!")
+		// Get actual TCP data from this layer
+		tcp, _ := tcpLayer.(*layers.TCP)
+		log.Printf("From src port %d to dst port %d", tcp.SrcPort, tcp.DstPort)
+	}
+}
+
 func main() {
 	if err := rlimit.RemoveMemlock(); err != nil {
 		log.Fatal(err)
@@ -119,6 +135,12 @@ func main() {
 		return
 	}
 	defer closeFunc()
+	reader, err := perf.NewReader(objs.Events, 4096)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer reader.Close()
 
 	ctx, stop := signal.NotifyContext(
 		context.Background(), syscall.SIGINT, syscall.SIGTERM,
@@ -126,6 +148,27 @@ func main() {
 	defer stop()
 
 	log.Println("...")
-	<-ctx.Done()
+loop:
+	for {
+		select {
+		case <-ctx.Done():
+			break loop
+		default:
+		}
+		record, err := reader.Read()
+		if err != nil {
+			if errors.Is(err, perf.ErrClosed) {
+				log.Println("Received signal, exiting...")
+				return
+			}
+			log.Printf("reading from reader: %s", err)
+			continue
+		}
+		if record.LostSamples > 0 {
+			log.Printf("lost %d events", record.LostSamples)
+			continue
+		}
+		parseEvent(record.RawSample)
+	}
 	log.Println("bye bye")
 }

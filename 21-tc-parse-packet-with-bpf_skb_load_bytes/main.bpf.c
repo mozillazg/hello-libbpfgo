@@ -9,8 +9,8 @@
 #define ETH_HLEN 14 /* Total octets in header.	 */
 
 #define TC_ACT_UNSPEC -1
-#define TC_ACT_SHOT 2
-#define TC_ACT_SHOT 2
+#define TC_ACT_OK      0
+#define TC_ACT_SHOT    2
 
 #define DATA_LEN 1024
 struct payload_t {
@@ -26,6 +26,8 @@ struct {
 
 SEC("tc")
 int handle_ingress(struct __sk_buff *skb) {
+    bpf_skb_pull_data(skb, 0);
+
     u16 h_proto;
     if (bpf_skb_load_bytes(skb, offsetof(struct ethhdr, h_proto), &h_proto,
                            sizeof(h_proto)) < 0)

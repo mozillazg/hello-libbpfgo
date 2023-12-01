@@ -7,7 +7,21 @@ import (
 	"syscall"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 )
+
+func parseEvent(data []byte) {
+	// Decode a packet
+	packet := gopacket.NewPacket(data, layers.LayerTypeEthernet, gopacket.Default)
+	// Get the TCP layer from this packet
+	if tcpLayer := packet.Layer(layers.LayerTypeTCP); tcpLayer != nil {
+		log.Println("This is a TCP packet!")
+		// Get actual TCP data from this layer
+		tcp, _ := tcpLayer.(*layers.TCP)
+		log.Printf("From src port %d to dst port %d", tcp.SrcPort, tcp.DstPort)
+	}
+}
 
 func main() {
 	bpfModule, err := bpf.NewModuleFromFile("main.bpf.o")
@@ -28,6 +42,7 @@ func main() {
 	hook.SetAttachPoint(bpf.BPFTcIngress)
 	err = hook.Create()
 	if err != nil {
+		log.Println(err)
 		if errno, ok := err.(syscall.Errno); ok && errno != syscall.EEXIST {
 			log.Fatalf("tc hook create: %v", err)
 		}
@@ -46,12 +61,33 @@ func main() {
 		log.Fatal(err)
 	}
 
+	eventsChannel := make(chan []byte)
+	lostChannel := make(chan uint64)
+	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, 1024)
+	if err != nil {
+		return
+	}
 	ctx, stop := signal.NotifyContext(
 		context.Background(), syscall.SIGINT, syscall.SIGTERM,
 	)
-	defer stop()
+	pb.Start()
+	defer func() {
+		pb.Stop()
+		pb.Close()
+		stop()
+	}()
 
 	log.Println("...")
-	<-ctx.Done()
-	log.Println("bye bye")
+loop:
+	for {
+		select {
+		case data := <-eventsChannel:
+			parseEvent(data)
+		case n := <-lostChannel:
+			log.Printf("lost %d events", n)
+		case <-ctx.Done():
+			break loop
+		}
+	}
+	log.Println("bye bye~")
 }
