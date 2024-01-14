@@ -154,7 +154,7 @@ Examples by program type:
 | ``BPF_PROG_TYPE_SYSCALL``                 |                                        | ``syscall``                      |                       |
 +-------------------------------------------+----------------------------------------+----------------------------------+-----------------------+
 | ``BPF_PROG_TYPE_TRACEPOINT``              |                                        | ``tp+``                          |`04`_ `07`_ `14`_      |
-+                                           +                                        +----------------------------------+                       +
++                                           +                                        +----------------------------------+`35`_ `36`_            +
 |                                           |                                        | ``tracepoint+``                  |                       |
 +-------------------------------------------+----------------------------------------+----------------------------------+-----------------------+
 | ``BPF_PROG_TYPE_TRACING``                 | ``BPF_MODIFY_RETURN``                  | ``fmod_ret+``                    |                       |
@@ -212,6 +212,8 @@ Examples by program type:
 .. _32: 32-fentry-hello
 .. _33: 33-xdp-hello
 .. _34: 34-iter-task-hello
+.. _35: 35-tracepoint-args-use-custom-struct
+.. _36: 36-tracepoint-args-sched_switch-use-custom-struct
 
 
 https://mozillazg.com/tag/libbpf.html
