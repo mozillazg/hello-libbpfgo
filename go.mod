@@ -1,14 +1,14 @@
 module github.com/mozillazg/hello-libbpfgo
 
-go 1.17
+go 1.20
 
 require (
-	github.com/aquasecurity/libbpfgo v0.4.9-libbpf-1.2.0
-	github.com/cilium/ebpf v0.11.0
+	github.com/aquasecurity/libbpfgo v0.6.0-libbpf-1.3
+	github.com/cilium/ebpf v0.12.3
 	github.com/florianl/go-tc v0.4.2
 	github.com/google/gopacket v1.1.19
 	golang.org/x/net v0.17.0
-	golang.org/x/sys v0.13.0
+	golang.org/x/sys v0.14.1-0.20231108175955-e4099bfacb8c
 )
 
 require (
