@@ -7,8 +7,8 @@ require (
 	github.com/cilium/ebpf v0.12.3
 	github.com/florianl/go-tc v0.4.2
 	github.com/google/gopacket v1.1.19
-	golang.org/x/net v0.17.0
-	golang.org/x/sys v0.14.1-0.20231108175955-e4099bfacb8c
+	golang.org/x/net v0.20.0
+	golang.org/x/sys v0.16.0
 )
 
 require (
