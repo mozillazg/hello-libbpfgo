@@ -3,7 +3,7 @@ set -e
 
 # base on https://github.com/aquasecurity/tracee/blob/main/Vagrantfile
 
-GO_VERSION="1.20"
+GO_VERSION="1.21.7"
 
 apt-get update
 apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12 bpftrace linux-tools-generic
