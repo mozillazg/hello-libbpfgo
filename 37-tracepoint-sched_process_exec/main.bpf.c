@@ -12,14 +12,6 @@ struct {
 } events SEC(".maps");
 
 
-struct {
-    __uint(type, BPF_MAP_TYPE_HASH);
-    __uint(max_entries, 10240);
-    __type(key, u64);
-    __type(value, struct event_t);
-} filename_ptrs SEC(".maps");
-
-
 SEC("tracepoint/sched/sched_process_exec")
 int tracepoint__sched__sched_process_exec(
     struct trace_event_raw_sched_process_exec *ctx) {
