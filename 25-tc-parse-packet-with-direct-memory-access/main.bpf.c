@@ -23,6 +23,8 @@ struct {
 
 SEC("tc")
 int handle_ingress(struct __sk_buff *skb) {
+    bpf_skb_pull_data(skb, 0);
+
     void *data_end = (void *)(long)skb->data_end;
     void *data = (void *)(long)skb->data;
 
