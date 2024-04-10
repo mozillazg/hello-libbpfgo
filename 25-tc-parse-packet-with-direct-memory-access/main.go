@@ -47,7 +47,6 @@ func main() {
 			log.Fatalf("tc hook create: %v", err)
 		}
 	}
-	defer hook.Destroy()
 
 	tcProg, err := bpfModule.GetProgram("handle_ingress")
 	if tcProg == nil {
@@ -55,11 +54,20 @@ func main() {
 	}
 
 	var tcOpts bpf.TcOpts
+	tcOpts.Handle = 1
+	tcOpts.Priority = 1
 	tcOpts.ProgFd = int(tcProg.GetFd())
 	err = hook.Attach(&tcOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer func() {
+		tcOpts.ProgFd = 0
+		tcOpts.ProgId = 0
+		if err := hook.Detach(&tcOpts); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	eventsChannel := make(chan []byte)
 	lostChannel := make(chan uint64)

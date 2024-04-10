@@ -32,7 +32,6 @@ func main() {
 			log.Fatalf("tc hook create: %v", err)
 		}
 	}
-	defer hook.Destroy()
 
 	tcProg, err := bpfModule.GetProgram("handle_ingress")
 	if tcProg == nil {
@@ -41,10 +40,19 @@ func main() {
 
 	var tcOpts bpf.TcOpts
 	tcOpts.ProgFd = int(tcProg.GetFd())
+	tcOpts.Handle = 1
+	tcOpts.Priority = 1
 	err = hook.Attach(&tcOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer func() {
+		tcOpts.ProgFd = 0
+		tcOpts.ProgId = 0
+		if err := hook.Detach(&tcOpts); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	ctx, stop := signal.NotifyContext(
 		context.Background(), syscall.SIGINT, syscall.SIGTERM,
