@@ -124,7 +124,7 @@ Comm: %s
 `,
 				cd.CgroupId, cd.HostTid, cd.HostPid, cd.HostPpid,
 				cd.Tid, cd.Pid, cd.Ppid, cd.Uid, cd.Gid,
-				cd.CgroupNsId, cd.IpcNsId, cd.NetNsId, cd.NetNsId, cd.MountNsId, cd.TimeNsId, cd.UserNsId, cd.UtsNsId,
+				cd.CgroupNsId, cd.IpcNsId, cd.NetNsId, cd.MountNsId, cd.PidNsId, cd.TimeNsId, cd.UserNsId, cd.UtsNsId,
 				cd.commName())
 		}
 	}
