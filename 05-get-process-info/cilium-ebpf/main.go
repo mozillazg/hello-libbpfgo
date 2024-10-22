@@ -107,7 +107,7 @@ Comm: %s
 `,
 			event.CgroupId, event.HostTid, event.HostPid, event.HostPpid,
 			event.Tid, event.Pid, event.Ppid, event.Uid, event.Gid,
-			event.CgroupNsId, event.IpcNsId, event.NetNsId, event.NetNsId, event.MountNsId, event.TimeNsId, event.UserNsId, event.UtsNsId,
+			event.CgroupNsId, event.IpcNsId, event.NetNsId, event.MountNsId, event.PidNsId, event.TimeNsId, event.UserNsId, event.UtsNsId,
 			unix.ByteSliceToString(event.Comm[:]))
 
 	}
