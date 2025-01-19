@@ -9,21 +9,15 @@ import (
 )
 
 // $BPF_CLANG and $BPF_CFLAGS are set by the Makefile
-//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS bpf ../main.bpf.c -- -I../ -I../output
-
-type Event struct {
-	Pid      uint32
-	Ret      uint32
-	FileName [256]byte
-}
+//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -type event_t Bpf ../main.bpf.c -- -I../ -I../output
 
 func main() {
 	if err := rlimit.RemoveMemlock(); err != nil {
 		log.Fatal(err)
 	}
 
-	objs := bpfObjects{}
-	if err := loadBpfObjects(&objs, nil); err != nil {
+	objs := BpfObjects{}
+	if err := LoadBpfObjects(&objs, nil); err != nil {
 		log.Fatal(err)
 	}
 	defer objs.Close()

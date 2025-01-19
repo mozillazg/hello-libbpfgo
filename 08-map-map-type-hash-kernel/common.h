@@ -7,3 +7,6 @@ struct event_t {
 
     char filename[256];
 };
+
+// cilium/ebpf need this
+const struct event_t *unused __attribute__((unused));

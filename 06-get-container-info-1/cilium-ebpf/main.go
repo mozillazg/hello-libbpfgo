@@ -9,36 +9,25 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
 	"github.com/cilium/ebpf/rlimit"
-	"golang.org/x/sys/unix"
 )
 
 // $BPF_CLANG and $BPF_CFLAGS are set by the Makefile
-//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS bpf ../main.bpf.c -- -I../ -I../output
-
-type Event struct {
-	HostPid  uint32
-	HostPpid uint32
-
-	Comm [16]byte
-}
+//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS --type event_t Bpf ../main.bpf.c -- -I../ -I../output
 
 var reContainerId = regexp.MustCompile(`/kubepods/besteffort/pod[^/]+/([0-9a-f]{64})$`)
-
-func (e Event) commName() string {
-	return unix.ByteSliceToString(e.Comm[:])
-}
 
 func main() {
 	if err := rlimit.RemoveMemlock(); err != nil {
 		log.Fatal(err)
 	}
 
-	objs := bpfObjects{}
-	if err := loadBpfObjects(&objs, nil); err != nil {
+	objs := BpfObjects{}
+	if err := LoadBpfObjects(&objs, nil); err != nil {
 		log.Fatal(err)
 	}
 	defer objs.Close()
@@ -69,14 +58,14 @@ func main() {
 			log.Printf("reading from reader: %s", err)
 			continue
 		}
-		var event Event
+		var event BpfEventT
 		if err := binary.Read(bytes.NewBuffer(record.RawSample), binary.LittleEndian, &event); err != nil {
 			log.Printf("parse event: %s", err)
 			continue
 		}
 
 		log.Printf(`HostPid: %d, HostPpid: %d, Comm: %s, ContainerId: %s`,
-			event.HostPid, event.HostPpid, event.commName(), getContainerId(event.HostPpid))
+			event.HostPid, event.HostPpid, GoString(event.Comm[:]), getContainerId(event.HostPpid))
 
 	}
 }
@@ -104,4 +93,18 @@ func getContainerId(pid uint32) string {
 		}
 	}
 	return ""
+}
+
+func GoString(cstring []int8) string {
+	var bs strings.Builder
+
+	for _, i := range cstring {
+		b := byte(i)
+		if b == '\x00' {
+			break
+		}
+		bs.WriteByte(b)
+	}
+
+	return bs.String()
 }

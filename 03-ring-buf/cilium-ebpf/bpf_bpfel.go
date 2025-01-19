@@ -12,28 +12,33 @@ import (
 	"github.com/cilium/ebpf"
 )
 
-// loadBpf returns the embedded CollectionSpec for bpf.
-func loadBpf() (*ebpf.CollectionSpec, error) {
+type BpfEvent struct {
+	Pid      uint32
+	Filename [256]int8
+}
+
+// LoadBpf returns the embedded CollectionSpec for Bpf.
+func LoadBpf() (*ebpf.CollectionSpec, error) {
 	reader := bytes.NewReader(_BpfBytes)
 	spec, err := ebpf.LoadCollectionSpecFromReader(reader)
 	if err != nil {
-		return nil, fmt.Errorf("can't load bpf: %w", err)
+		return nil, fmt.Errorf("can't load Bpf: %w", err)
 	}
 
 	return spec, err
 }
 
-// loadBpfObjects loads bpf and converts it into a struct.
+// LoadBpfObjects loads Bpf and converts it into a struct.
 //
 // The following types are suitable as obj argument:
 //
-//	*bpfObjects
-//	*bpfPrograms
-//	*bpfMaps
+//	*BpfObjects
+//	*BpfPrograms
+//	*BpfMaps
 //
 // See ebpf.CollectionSpec.LoadAndAssign documentation for details.
-func loadBpfObjects(obj interface{}, opts *ebpf.CollectionOptions) error {
-	spec, err := loadBpf()
+func LoadBpfObjects(obj interface{}, opts *ebpf.CollectionOptions) error {
+	spec, err := LoadBpf()
 	if err != nil {
 		return err
 	}
@@ -41,64 +46,64 @@ func loadBpfObjects(obj interface{}, opts *ebpf.CollectionOptions) error {
 	return spec.LoadAndAssign(obj, opts)
 }
 
-// bpfSpecs contains maps and programs before they are loaded into the kernel.
+// BpfSpecs contains maps and programs before they are loaded into the kernel.
 //
 // It can be passed ebpf.CollectionSpec.Assign.
-type bpfSpecs struct {
-	bpfProgramSpecs
-	bpfMapSpecs
+type BpfSpecs struct {
+	BpfProgramSpecs
+	BpfMapSpecs
 }
 
-// bpfSpecs contains programs before they are loaded into the kernel.
+// BpfSpecs contains programs before they are loaded into the kernel.
 //
 // It can be passed ebpf.CollectionSpec.Assign.
-type bpfProgramSpecs struct {
+type BpfProgramSpecs struct {
 	KprobeDoSysOpenat2 *ebpf.ProgramSpec `ebpf:"kprobe__do_sys_openat2"`
 }
 
-// bpfMapSpecs contains maps before they are loaded into the kernel.
+// BpfMapSpecs contains maps before they are loaded into the kernel.
 //
 // It can be passed ebpf.CollectionSpec.Assign.
-type bpfMapSpecs struct {
+type BpfMapSpecs struct {
 	Events *ebpf.MapSpec `ebpf:"events"`
 }
 
-// bpfObjects contains all objects after they have been loaded into the kernel.
+// BpfObjects contains all objects after they have been loaded into the kernel.
 //
-// It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
-type bpfObjects struct {
-	bpfPrograms
-	bpfMaps
+// It can be passed to LoadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
+type BpfObjects struct {
+	BpfPrograms
+	BpfMaps
 }
 
-func (o *bpfObjects) Close() error {
+func (o *BpfObjects) Close() error {
 	return _BpfClose(
-		&o.bpfPrograms,
-		&o.bpfMaps,
+		&o.BpfPrograms,
+		&o.BpfMaps,
 	)
 }
 
-// bpfMaps contains all maps after they have been loaded into the kernel.
+// BpfMaps contains all maps after they have been loaded into the kernel.
 //
-// It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
-type bpfMaps struct {
+// It can be passed to LoadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
+type BpfMaps struct {
 	Events *ebpf.Map `ebpf:"events"`
 }
 
-func (m *bpfMaps) Close() error {
+func (m *BpfMaps) Close() error {
 	return _BpfClose(
 		m.Events,
 	)
 }
 
-// bpfPrograms contains all programs after they have been loaded into the kernel.
+// BpfPrograms contains all programs after they have been loaded into the kernel.
 //
-// It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
-type bpfPrograms struct {
+// It can be passed to LoadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
+type BpfPrograms struct {
 	KprobeDoSysOpenat2 *ebpf.Program `ebpf:"kprobe__do_sys_openat2"`
 }
 
-func (p *bpfPrograms) Close() error {
+func (p *BpfPrograms) Close() error {
 	return _BpfClose(
 		p.KprobeDoSysOpenat2,
 	)
