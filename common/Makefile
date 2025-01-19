@@ -26,14 +26,14 @@ CFLAGS = -ggdb -gdwarf -O2 -Wall -fpie -Wno-unused-variable -Wno-unused-function
 LDFLAGS =
 
 BPF_CFLAGS_STATIC = "-I$(abspath $(OUTPUT))"
-BPF_LDFLAGS_STATIC = "-lelf -lz $(LIBBPF_OBJ)"
+BPF_LDFLAGS_STATIC = "-lzstd -lelf -lz $(LIBBPF_OBJ)"
 
 CGO_CFLAGS_STATIC = "-I$(abspath $(OUTPUT))"
-CGO_LDFLAGS_STATIC = "-lelf -lz $(LIBBPF_OBJ)"
+CGO_LDFLAGS_STATIC = "-lzstd -lelf -lz $(LIBBPF_OBJ)"
 CGO_EXTLDFLAGS_STATIC = '-w -extldflags "-static"'
 
 CGO_CFGLAGS_DYN = "-I. -I/usr/include/"
-CGO_LDFLAGS_DYN = "-lelf -lz -lbpf"
+CGO_LDFLAGS_DYN = "-lzstd -lelf -lz -lbpf"
 CGO_EXTLDFLAGS_DYN = '-w'
 
 ## program
