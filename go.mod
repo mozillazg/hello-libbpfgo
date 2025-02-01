@@ -3,7 +3,7 @@ module github.com/mozillazg/hello-libbpfgo
 go 1.21.0
 
 require (
-	github.com/aquasecurity/libbpfgo v0.6.0-libbpf-1.3
+	github.com/aquasecurity/libbpfgo v0.8.0-libbpf-1.5
 	github.com/cilium/ebpf v0.16.0
 	github.com/florianl/go-tc v0.4.4
 	github.com/google/gopacket v1.1.19
