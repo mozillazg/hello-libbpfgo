@@ -5,20 +5,15 @@ import (
 	"encoding/binary"
 	"errors"
 	"log"
+	"strings"
 
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
 	"github.com/cilium/ebpf/rlimit"
-	"golang.org/x/sys/unix"
 )
 
 // $BPF_CLANG and $BPF_CFLAGS are set by the Makefile
-//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS bpf ../main.bpf.c -- -I../ -I../output
-
-type Event struct {
-	Pid      uint32
-	FileName [256]byte
-}
+//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -type event Bpf ../main.bpf.c -- -I../ -I../output
 
 func main() {
 	kernel_func_name := "do_sys_openat2"
@@ -26,8 +21,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	objs := bpfObjects{}
-	if err := loadBpfObjects(&objs, nil); err != nil {
+	objs := BpfObjects{}
+	if err := LoadBpfObjects(&objs, nil); err != nil {
 		log.Fatal(err)
 	}
 	defer objs.Close()
@@ -58,12 +53,26 @@ func main() {
 			log.Printf("reading from reader: %s", err)
 			continue
 		}
-		var event Event
+		var event BpfEvent
 		if err := binary.Read(bytes.NewBuffer(record.RawSample), binary.LittleEndian, &event); err != nil {
 			log.Printf("parse event: %s", err)
 			continue
 		}
-		log.Printf("pid %d, file: %s", event.Pid, unix.ByteSliceToString(event.FileName[:]))
+		log.Printf("pid %d, file: %s", event.Pid, GoString(event.Filename[:]))
 
 	}
+}
+
+func GoString(cstring []int8) string {
+	var bs strings.Builder
+
+	for _, i := range cstring {
+		b := byte(i)
+		if b == '\x00' {
+			break
+		}
+		bs.WriteByte(b)
+	}
+
+	return bs.String()
 }

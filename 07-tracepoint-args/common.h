@@ -9,3 +9,6 @@ struct event_t {
     char comm[TASK_COMM_LEN]; // the name of the executable (excluding the path)
     char filename[256];
 };
+
+// cilium/ebpf need this
+const struct event_t *unused __attribute__((unused));
