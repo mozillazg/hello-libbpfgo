@@ -75,7 +75,7 @@ int socket__filter_demo(struct __sk_buff *skb) {
 
     if (tcp_payload_len == 0) {
         goto out;
-    } else if (tcp_payload_len > MAX_TCP_PAYLOAD_SIZE) {
+    } else if (tcp_payload_len >= MAX_TCP_PAYLOAD_SIZE) {
         bpf_printk("tcp_payload_len > MAX_TCP_PAYLOAD_SIZE");
         if (bpf_skb_load_bytes(skb, tcp_payload_offset, &tcp_payload, MAX_TCP_PAYLOAD_SIZE) < 0) {
             goto out;
@@ -86,6 +86,12 @@ int socket__filter_demo(struct __sk_buff *skb) {
             goto out;
         }
     } else {
+        // avoid
+        //    call bpf_skb_load_bytes#26
+        //    R4 invalid zero-sized read: xxx
+        // or
+        //    call bpf_skb_load_bytes#26
+        //    R4 min value is negative, either use unsigned or 'var &= const'
         u32 read_size = sizeof(tcp_payload) - 1;
         if (read_size > tcp_payload_len - 1) {
             read_size = tcp_payload_len - 1;
@@ -98,7 +104,7 @@ int socket__filter_demo(struct __sk_buff *skb) {
         if (bpf_skb_load_bytes(skb, tcp_payload_offset, &tcp_payload, read_size + 1) < 0) {
             goto out;
         }
-        bpf_printk("read size: %d", read_size+1);
+        bpf_printk("read size: %d", read_size + 1);
     }
 
     bpf_printk("saddr: %pI4, daddr: %pI4:%d, payload: %s", &ip_hdr.saddr, &ip_hdr.daddr,
