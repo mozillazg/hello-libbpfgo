@@ -123,6 +123,11 @@ run:
 cat:
 	sudo cat /sys/kernel/debug/tracing/trace_pipe
 
+
+.PHONE: lint
+lint:
+	clang-format -i *.c *.h
+
 ## clean
 
 .PHONY: clean

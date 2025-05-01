@@ -4,7 +4,7 @@ hello-libbpfgo
 |Build examples|
 
 
-Examples for libbpf, `aquasecurity/libbpfgo <https://github.com/aquasecurity/libbpfgo>`__ and `cilium/ebpf <https://github.com/cilium/ebpf>`__.
+Examples for `aquasecurity/libbpfgo <https://github.com/aquasecurity/libbpfgo>`__ and `cilium/ebpf <https://github.com/cilium/ebpf>`__.
 
 
 
@@ -169,7 +169,7 @@ Examples by program type:
 +                                           +----------------------------------------+----------------------------------+-------------------------------------------+
 |                                           | ``BPF_SK_SKB_STREAM_VERDICT``          | ``sk_skb/stream_verdict``        |                                           |
 +-------------------------------------------+----------------------------------------+----------------------------------+-------------------------------------------+
-| ``BPF_PROG_TYPE_SOCKET_FILTER``           |                                        | ``socket``                       |`18`_ `19`_ `20`_ `39`_                    |
+| ``BPF_PROG_TYPE_SOCKET_FILTER``           |                                        | ``socket``                       |`18`_ `19`_ `20`_ `39`_ `49`_              |
 +-------------------------------------------+----------------------------------------+----------------------------------+-------------------------------------------+
 | ``BPF_PROG_TYPE_SOCK_OPS``                | ``BPF_CGROUP_SOCK_OPS``                | ``sockops``                      |                                           |
 +-------------------------------------------+----------------------------------------+----------------------------------+-------------------------------------------+
@@ -250,5 +250,4 @@ Examples by program type:
 .. _46: 46-iter-sleepable-task
 .. _47: 47-iter-task-file-hello
 .. _48: 48-iter-tcp-hello
-
-https://mozillazg.com/tag/libbpf.html
+.. _49: 49-socket-filter-parse-tcp-payload
