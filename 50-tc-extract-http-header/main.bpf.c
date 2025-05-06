@@ -22,27 +22,30 @@ struct result_t {
 };
 
 // extract "User-Agent"
-// don't true the result if the request is coming from user
+// don't trust the result if the request is coming from user
 static __always_inline int extract_user_agent_header(
     struct __sk_buff *skb, u32 offset, int msg_len, struct result_t *result) {
     int i, start_pos = -1;
     long err;
+    u32 initial_offset = offset; // Store initial offset for later use
 
+    // Limit search length to prevent excessive processing
     int search_len = msg_len;
     if (search_len > MAX_HEADER_LEN) {
         search_len = MAX_HEADER_LEN;
     }
 
+    // Search for "User-Agent: " header (12 characters)
     char word[] = "User-Agent: ";
     #pragma unroll
-    for (i = 0; i <= search_len - 8; i++) {
+    for (i = 0; i <= search_len - 12; i++) {
         err = bpf_skb_load_bytes(skb, offset, &word, sizeof(word)-1);
          if (err < 0) {
              bpf_printk("BPF read word failed at offset %d, err %d", offset, err);
              break;
          }
          bpf_printk("offset %d, word: %s", offset, word);
-         // "User-Agent: "
+         // Check for exact match with "User-Agent: "
          if (word[0] == 'U' && word[1] == 's' && word[2] == 'e' &&
              word[3] == 'r' && word[4] == '-' && word[5] == 'A' &&
              word[6] == 'g' && word[7] == 'e' && word[8] == 'n' &&
@@ -53,32 +56,35 @@ static __always_inline int extract_user_agent_header(
         offset++;
     }
 
+    // If "User-Agent: " not found, return error
     if (start_pos < 0) {
-        bpf_printk("'User-Agent: ' not found"); // Optional debug print
-        return -1; // Pattern not found
+        bpf_printk("'User-Agent: ' not found");
+        return -1;
     }
+
+    // Check if there's enough data to read User-Agent value
     if (search_len - start_pos <= 0) {
         bpf_printk("invalid data");
         return -1;
     }
+    offset = initial_offset + start_pos;
 
+    // Read the User-Agent value until CR, LF or buffer full
     int j = 0;
     #pragma unroll
-    for (j = 0; j<= search_len - start_pos; j++) {
+    for (j = 0; j <= MAX_VALUE_SIZE - 1 && j <= search_len - start_pos; j++) {
         char c;
-        err = bpf_skb_load_bytes(skb, offset, &c, sizeof(c));
+        err = bpf_skb_load_bytes(skb, offset + j, &c, sizeof(c));
         if (err < 0) {
-            bpf_printk("BPF read word failed at offset %d, err %d", i, err);
+            bpf_printk("BPF read failed at offset %d, err %d", offset + j, err);
             break;
         }
-        offset++;
+
+        // Stop at line break
         if (c == '\r' || c == '\n') {
             break;
         }
-        if (j >= MAX_VALUE_SIZE - 1) {
-            bpf_printk("Buffer overflow");
-            break;
-        }
+
         result->value[j] = c;
     }
     result->value[j] = '\0'; // Null-terminate the string
