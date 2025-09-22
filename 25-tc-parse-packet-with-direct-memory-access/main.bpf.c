@@ -23,6 +23,8 @@ struct {
 
 SEC("tc")
 int handle_ingress(struct __sk_buff *skb) {
+    // If need to copy payload to user space, modify this line
+    // bpf_skb_pull_data(skb, skb->len);
     bpf_skb_pull_data(skb, 0);
 
     void *data_end = (void *)(long)skb->data_end;
