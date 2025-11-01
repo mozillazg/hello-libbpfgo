@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/aquasecurity/libbpfgo v0.8.0-libbpf-1.5
 	github.com/cilium/ebpf v0.16.0
-	github.com/florianl/go-tc v0.4.4
+	github.com/florianl/go-tc v0.4.7
 	github.com/google/gopacket v1.1.19
 	golang.org/x/net v0.34.0
 	golang.org/x/sys v0.33.0
